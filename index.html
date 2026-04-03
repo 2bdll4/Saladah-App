@@ -640,7 +640,13 @@ input::placeholder { color:var(--text4); }
         <button class="lf-btn" id="loginBtn" onclick="doLogin()">
           <span id="loginBtnText">Masuk Sekarang</span>
         </button>
-
+        <div style="text-align:right;margin-top:6px;margin-bottom:4px"><span onclick="showForgot()" style="font-size:11px;color:var(--text3);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Lupa password?</span></div>
+        <div class="lf-divider">atau</div>
+        <div class="lf-footer">
+          Belum punya akun?
+          <span class="lf-register-link" onclick="showRegister()">Daftar gratis →</span>
+        </div>
+      </div>
 
       <!-- REGISTER FORM -->
       <div id="form-register" class="register-form">

@@ -2419,7 +2419,7 @@ function renderPengeluaran() {
     return true;
   });
   document.getElementById('expenseTable').innerHTML=expList.length?expList.map(e=>`
-    <tr><td class="mono">${fmt(e.date)}</td><td><span class="badge b-gray">${e.cat}</span></td><td style="color:var(--text2)">${e.desc||'—'}</td><td style="color:var(--red);font-weight:700;font-family:'JetBrains Mono',monospace">${fmtRp(e.amount)}</td>
+    <tr><td class="mono">${fmt(e.date)}</td><td><span class="badge b-gray">${e.cat}</span></td><td style="color:var(--text2)">${e.desc||'—'}</td><td style="color:var(--red);font-weight:700;font-family:JetBrains Mono,monospace">${fmtRp(e.amount)}</td>
     <td><button class="btn btn-sm btn-danger" onclick="deleteExpense('${e._id}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:28px">Belum ada pengeluaran.</td></tr>';
 }
 

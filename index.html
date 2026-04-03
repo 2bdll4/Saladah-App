@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>One Hidroponik</title>
+<title>One Hidroponik — Selada Keriting</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -120,7 +120,7 @@ nav::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:3p
   box-shadow:0 1px 0 var(--bdr2), 0 4px 16px rgba(0,80,40,.04);
 }
 .page-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:700; color:var(--text); }
-.topbar-right { display:flex; align-items:center; gap:10px; }
+.topbar-right { display:flex; align-items:center; gap:10px; position:relative; }
 .clock-chip {
   background:var(--g-pale); border:1px solid var(--bdr);
   border-radius:var(--radius-sm); padding:5px 14px;
@@ -417,22 +417,158 @@ input::placeholder { color:var(--text4); }
 .bn-badge { position:absolute; top:4px; right:calc(50% - 16px); background:var(--red); color:#fff; font-size:9px; border-radius:10px; padding:1px 5px; display:none; }
 .bn-badge.show { display:block; }
 
-/* ── SUPABASE CONFIG PANEL ── */
-.config-panel {
-  position:fixed; inset:0; background:linear-gradient(135deg, #0a1e14, #0d7a4e);
-  z-index:10000; display:flex; align-items:center; justify-content:center; padding:20px;
+/* ── LOGIN PAGE ── */
+.login-screen {
+  position:fixed; inset:0; z-index:10000;
+  display:flex; align-items:stretch;
+  font-family:'Plus Jakarta Sans', sans-serif;
 }
-.config-box {
-  background:var(--white); border-radius:20px; padding:32px;
-  width:100%; max-width:500px; box-shadow:0 32px 80px rgba(0,0,0,.3);
+.login-left {
+  flex:1; position:relative; overflow:hidden;
+  background:#0a1a0f;
+  display:flex; flex-direction:column; justify-content:flex-end; padding:52px;
 }
-.config-logo { font-family:'Playfair Display', serif; font-size:26px; font-weight:800; color:var(--g1); margin-bottom:4px; }
-.config-sub { font-size:13px; color:var(--text3); margin-bottom:28px; }
-.config-field { margin-bottom:14px; }
-.config-divider { display:flex; align-items:center; gap:12px; margin:18px 0; color:var(--text4); font-size:12px; }
-.config-divider::before,.config-divider::after { content:''; flex:1; height:1px; background:var(--bdr); }
-.config-note { background:var(--g-light); border:1px solid var(--g-mid); border-radius:10px; padding:12px 14px; font-size:12px; color:var(--g1); line-height:1.6; margin-top:16px; }
-.config-note a { color:var(--g1); font-weight:700; }
+.login-canvas { position:absolute; inset:0; z-index:0; }
+.login-left-content { position:relative; z-index:2; }
+.login-brand {
+  font-family:'Playfair Display', serif;
+  font-size:52px; font-weight:800; color:#fff;
+  line-height:1.05; letter-spacing:-2px; margin-bottom:16px;
+}
+.login-brand em { color:#4edba3; font-style:normal; display:block; }
+.login-tagline { font-size:15px; color:rgba(255,255,255,.5); line-height:1.7; max-width:380px; }
+.login-stats {
+  display:flex; gap:32px; margin-top:36px;
+  padding-top:28px; border-top:1px solid rgba(255,255,255,.1);
+}
+.ls-item { }
+.ls-val { font-family:'Playfair Display', serif; font-size:28px; font-weight:800; color:#4edba3; }
+.ls-label { font-size:11px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; }
+.login-deco {
+  position:absolute; border-radius:50%;
+  background:radial-gradient(circle, rgba(22,196,122,.15) 0%, transparent 70%);
+  pointer-events:none;
+}
+.login-right {
+  width:480px; background:#fff; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:56px 52px;
+  position:relative; overflow:hidden;
+}
+.login-right::before {
+  content:''; position:absolute; top:-80px; right:-80px;
+  width:240px; height:240px; border-radius:50%;
+  background:radial-gradient(circle, rgba(13,122,78,.06), transparent 70%);
+}
+.login-form-wrap { width:100%; max-width:360px; position:relative; z-index:1; }
+.lf-eyebrow {
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--g2); font-weight:700; margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.lf-eyebrow::before { content:''; width:24px; height:2px; background:var(--g3); border-radius:2px; }
+.lf-title {
+  font-family:'Playfair Display', serif;
+  font-size:32px; font-weight:800; color:var(--text);
+  line-height:1.15; margin-bottom:8px; letter-spacing:-1px;
+}
+.lf-sub { font-size:13px; color:var(--text3); margin-bottom:36px; line-height:1.5; }
+.lf-group { margin-bottom:18px; }
+.lf-label {
+  display:block; font-size:11px; font-weight:700; color:var(--text2);
+  text-transform:uppercase; letter-spacing:.6px; margin-bottom:7px;
+}
+.lf-input-wrap { position:relative; }
+.lf-input-icon {
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  font-size:15px; pointer-events:none;
+}
+.lf-input {
+  width:100%; padding:13px 14px 13px 42px;
+  border:1.5px solid var(--bdr); border-radius:12px;
+  font-size:14px; font-family:'Plus Jakarta Sans', sans-serif;
+  color:var(--text); background:var(--g-pale);
+  outline:none; transition:all .2s;
+}
+.lf-input:focus {
+  border-color:var(--g2); background:#fff;
+  box-shadow:0 0 0 4px rgba(18,163,104,.1);
+}
+.lf-input::placeholder { color:var(--text4); }
+.lf-btn {
+  width:100%; padding:14px; border-radius:12px; border:none;
+  background:linear-gradient(135deg, #0a5c3a, #0d7a4e, #12a368);
+  background-size:200% 200%; background-position:0% 50%;
+  color:#fff; font-size:15px; font-weight:700;
+  font-family:'Plus Jakarta Sans', sans-serif; cursor:pointer;
+  transition:all .3s; margin-top:8px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 4px 20px rgba(13,122,78,.35);
+}
+.lf-btn:hover { background-position:100% 50%; transform:translateY(-1px); box-shadow:0 8px 28px rgba(13,122,78,.4); }
+.lf-btn:active { transform:translateY(0); }
+.lf-btn.loading { opacity:.7; cursor:not-allowed; pointer-events:none; }
+.lf-divider {
+  display:flex; align-items:center; gap:12px;
+  margin:20px 0; color:var(--text4); font-size:12px;
+}
+.lf-divider::before,.lf-divider::after { content:''; flex:1; height:1px; background:var(--bdr); }
+.lf-guest {
+  width:100%; padding:13px; border-radius:12px;
+  border:1.5px solid var(--bdr); background:transparent;
+  color:var(--text2); font-size:14px; font-weight:600;
+  font-family:'Plus Jakarta Sans', sans-serif; cursor:pointer;
+  transition:all .2s; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.lf-guest:hover { border-color:var(--g3); background:var(--g-pale); color:var(--g1); }
+.lf-error {
+  background:var(--red-bg); border:1px solid var(--red-bdr);
+  border-radius:9px; padding:10px 14px; font-size:12px;
+  color:var(--red); margin-bottom:14px; display:none;
+}
+.lf-footer { margin-top:32px; text-align:center; font-size:11px; color:var(--text4); line-height:1.6; }
+.lf-register-link { color:var(--g1); font-weight:700; cursor:pointer; text-decoration:underline; }
+/* Animated leaves */
+@keyframes floatLeaf { 0%{transform:translateY(0) rotate(0deg);opacity:.6} 50%{transform:translateY(-20px) rotate(10deg);opacity:.9} 100%{transform:translateY(0) rotate(0deg);opacity:.6} }
+.leaf { position:absolute; pointer-events:none; animation:floatLeaf ease-in-out infinite; font-size:20px; }
+/* Register form toggle */
+.register-form { display:none; }
+
+/* Login entry animation */
+@keyframes loginSlideIn { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:none} }
+@keyframes loginFadeIn  { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.login-right { animation:loginSlideIn .5s cubic-bezier(.4,0,.2,1) both; }
+.login-left-content { animation:loginFadeIn .7s .1s cubic-bezier(.4,0,.2,1) both; }
+.lf-group { animation:loginFadeIn .4s both; }
+.lf-group:nth-child(4) { animation-delay:.05s }
+.lf-group:nth-child(5) { animation-delay:.1s }
+.lf-group:nth-child(6) { animation-delay:.15s }
+
+/* Mesh gradient background behind login right */
+.login-right::after {
+  content:''; position:absolute; bottom:-120px; left:-120px;
+  width:320px; height:320px; border-radius:50%;
+  background:radial-gradient(circle, rgba(78,219,163,.08), transparent 70%);
+  pointer-events:none;
+}
+
+/* Focus glow on lf-input icon */
+.lf-input-wrap:focus-within .lf-input-icon { filter:saturate(2); }
+
+/* Smooth animated underline on lf-register-link */
+.lf-register-link { position:relative; text-decoration:none!important; border-bottom:1.5px dashed var(--g3); padding-bottom:1px; transition:border-color .2s; }
+.lf-register-link:hover { border-color:var(--g1); }
+
+@media(max-width:860px) {
+  .login-left { display:none; }
+  .login-right { width:100%; padding:40px 28px; }
+}
+
+/* Search filter bar */
+@media(max-width:600px) {
+  #sale-search, #expense-search { font-size:12px; }
+}
+/* User dropdown */
+#userMenu { animation:fadeUp .15s ease; }
 </style>
 </head>
 <body>
@@ -444,36 +580,137 @@ input::placeholder { color:var(--text4); }
   <div class="load-bar"><div class="load-fill"></div></div>
 </div>
 
-<!-- SUPABASE CONFIG PANEL -->
-<div class="config-panel" id="configPanel" style="display:none">
-  <div class="config-box">
-    <div class="config-logo">🌿 One Hidroponik</div>
-    <div class="config-sub">Hubungkan ke database Supabase Anda untuk memulai</div>
-    <div class="config-field">
-      <div class="form-group">
-        <label>Supabase URL</label>
-        <input type="text" id="cfg-url" placeholder="https://xxxxxxxxxxxx.supabase.co">
+<!-- LOGIN PAGE -->
+<div class="login-screen" id="loginScreen" style="display:none">
+  <!-- Left: Brand panel -->
+  <div class="login-left">
+    <canvas class="login-canvas" id="leafCanvas"></canvas>
+    <div class="login-deco" style="width:500px;height:500px;top:-150px;right:-150px;"></div>
+    <div class="login-deco" style="width:300px;height:300px;bottom:100px;left:-80px;"></div>
+    <!-- Floating leaves -->
+    <span class="leaf" style="top:15%;left:8%;animation-duration:6s;animation-delay:0s">🌿</span>
+    <span class="leaf" style="top:30%;left:20%;animation-duration:7s;animation-delay:1s;font-size:14px">🌱</span>
+    <span class="leaf" style="top:55%;left:5%;animation-duration:5s;animation-delay:2s;font-size:12px">🍃</span>
+    <span class="leaf" style="top:70%;left:30%;animation-duration:8s;animation-delay:.5s;font-size:16px">🌿</span>
+    <span class="leaf" style="top:10%;left:55%;animation-duration:6.5s;animation-delay:1.5s;font-size:11px">🍃</span>
+    <div class="login-left-content">
+      <div class="login-brand">One<em>Hidroponik</em></div>
+      <div class="login-tagline">
+        Sistem manajemen kebun selada keriting hidroponik — dari semai hingga panen, semua tercatat rapi dalam satu platform.
+      </div>
+      <!-- Live date chip -->
+      <div id="loginClock" style="display:inline-flex;align-items:center;gap:7px;margin-top:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:6px 14px;font-size:12px;color:rgba(255,255,255,.6);font-family:'JetBrains Mono',monospace;letter-spacing:.5px"></div>
+      <div class="login-stats">
+        <div class="ls-item"><div class="ls-val">49</div><div class="ls-label">Hari Panen</div></div>
+        <div class="ls-item"><div class="ls-val">150g</div><div class="ls-label">Per Tanaman</div></div>
+        <div class="ls-item"><div class="ls-val">∞</div><div class="ls-label">Batch Tercatat</div></div>
       </div>
     </div>
-    <div class="config-field">
-      <div class="form-group">
-        <label>Supabase Anon Key</label>
-        <input type="text" id="cfg-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
-      </div>
+  </div>
+
+  <!-- Right: Form panel -->
+  <div class="login-right">
+    <!-- Top logo mark -->
+    <div style="position:absolute;top:28px;left:52px;display:flex;align-items:center;gap:8px">
+      <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--g1),var(--g3));display:flex;align-items:center;justify-content:center;font-size:16px">🌿</div>
+      <span style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text)">One Hidroponik</span>
     </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="saveConfig()">
-      🔌 Hubungkan ke Supabase
-    </button>
-    <div class="config-divider">atau</div>
-    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="useOfflineMode()">
-      📱 Gunakan Mode Offline (Demo)
-    </button>
-    <div class="config-note">
-      <strong>Cara mendapatkan credentials:</strong><br>
-      1. Buka <a href="https://supabase.com" target="_blank">supabase.com</a> → buat project baru<br>
-      2. Masuk ke <strong>Settings → API</strong><br>
-      3. Copy <strong>Project URL</strong> dan <strong>anon public key</strong><br>
-      4. Jalankan SQL di bawah di <strong>SQL Editor</strong> Supabase Anda
+    <div class="login-form-wrap">
+      <!-- LOGIN FORM -->
+      <div id="form-login">
+        <div class="lf-eyebrow">Selamat Datang</div>
+        <div class="lf-title">Masuk ke<br>Dashboard</div>
+        <div class="lf-sub">Kelola batch tanam, keuangan, dan penjualan selada Anda.</div>
+        <div id="login-error" class="lf-error">⚠️ Email atau password salah. Coba lagi.</div>
+        <div class="lf-group">
+          <label class="lf-label">Email</label>
+          <div class="lf-input-wrap">
+            <span class="lf-input-icon">📧</span>
+            <input class="lf-input" type="email" id="login-email" placeholder="nama@email.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="lf-group">
+          <label class="lf-label">Password</label>
+          <div class="lf-input-wrap">
+            <span class="lf-input-icon">🔒</span>
+            <input class="lf-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:44px">
+            <button type="button" onclick="togglePwd('login-pass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;color:var(--text4);padding:0;line-height:1;opacity:.6" title="Tampilkan password">👁</button>
+          </div>
+        </div>
+        <button class="lf-btn" id="loginBtn" onclick="doLogin()">
+          <span id="loginBtnText">Masuk Sekarang</span>
+        </button>
+        <div style="text-align:right;margin-top:6px;margin-bottom:4px"><span onclick="showForgot()" style="font-size:11px;color:var(--text3);cursor:pointer;text-decoration:underline;text-underline-offset:2px">Lupa password?</span></div>
+        <div class="lf-divider">atau</div>
+        <button class="lf-guest" onclick="useOfflineMode()">
+          🌱 Coba Mode Demo (tanpa akun)
+        </button>
+        <div class="lf-footer">
+          Belum punya akun?
+          <span class="lf-register-link" onclick="showRegister()">Daftar gratis →</span>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="form-register" class="register-form">
+        <div class="lf-eyebrow">Buat Akun Baru</div>
+        <div class="lf-title">Daftar &<br>Mulai Gratis</div>
+        <div class="lf-sub">Data Anda tersimpan aman di Supabase. Akses dari mana saja.</div>
+        <div id="register-error" class="lf-error"></div>
+        <div id="register-success" style="display:none;background:var(--g-light);border:1px solid var(--g-mid);border-radius:9px;padding:10px 14px;font-size:12px;color:var(--g1);margin-bottom:14px">✅ Akun berhasil dibuat! Cek email untuk verifikasi, lalu login.</div>
+        <div class="lf-group">
+          <label class="lf-label">Nama Usaha / Nama Anda</label>
+          <div class="lf-input-wrap">
+            <span class="lf-input-icon">🌿</span>
+            <input class="lf-input" type="text" id="reg-name" placeholder="One Hidroponik">
+          </div>
+        </div>
+        <div class="lf-group">
+          <label class="lf-label">Email</label>
+          <div class="lf-input-wrap">
+            <span class="lf-input-icon">📧</span>
+            <input class="lf-input" type="email" id="reg-email" placeholder="nama@email.com">
+          </div>
+        </div>
+        <div class="lf-group">
+          <label class="lf-label">Password (min. 6 karakter)</label>
+          <div class="lf-input-wrap">
+            <span class="lf-input-icon">🔒</span>
+            <input class="lf-input" type="password" id="reg-pass" placeholder="Buat password kuat" onkeydown="if(event.key==='Enter')doRegister()" style="padding-right:44px">
+            <button type="button" onclick="togglePwd('reg-pass',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;color:var(--text4);padding:0;line-height:1;opacity:.6" title="Tampilkan password">👁</button>
+          </div>
+        </div>
+        <button class="lf-btn" id="registerBtn" onclick="doRegister()">
+          <span id="registerBtnText">Buat Akun →</span>
+        </button>
+        <div class="lf-footer">
+          Sudah punya akun?
+          <span class="lf-register-link" onclick="showLogin()">Login →</span>
+        </div>
+      </div>
+
+
+      <!-- FORGOT PASSWORD FORM -->
+      <div id="form-forgot" style="display:none">
+        <div class="lf-eyebrow">Reset Password</div>
+        <div class="lf-title">Lupa<br>Password?</div>
+        <div class="lf-sub">Masukkan email Anda. Kami akan kirim link reset password.</div>
+        <div id="forgot-error" class="lf-error"></div>
+        <div id="forgot-success" style="display:none;background:var(--g-light);border:1px solid var(--g-mid);border-radius:9px;padding:12px 14px;font-size:12px;color:var(--g1);margin-bottom:14px;line-height:1.6">✅ Email reset telah dikirim! Cek inbox (dan folder spam) Anda.</div>
+        <div class="lf-group">
+          <label class="lf-label">Email Terdaftar</label>
+          <div class="lf-input-wrap">
+            <span class="lf-input-icon">📧</span>
+            <input class="lf-input" type="email" id="forgot-email" placeholder="nama@email.com" onkeydown="if(event.key==='Enter')doForgot()">
+          </div>
+        </div>
+        <button class="lf-btn" id="forgotBtn" onclick="doForgot()">
+          <span id="forgotBtnText">Kirim Link Reset →</span>
+        </button>
+        <div class="lf-footer">
+          <span class="lf-register-link" onclick="showLogin()">← Kembali ke Login</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -484,6 +721,7 @@ input::placeholder { color:var(--text4); }
     <div class="logo-eyebrow">One Hidroponik</div>
     <div class="logo-name"><em>Selada</em> Keriting</div>
     <div class="logo-product">🌱 Sistem Manajemen</div>
+    <div id="sidebarUser" style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.45);display:none"><span id="sidebarUserName"></span></div>
     <div class="sync-badge">
       <div class="sync-dot" id="syncDot"></div>
       <span id="syncText">Menghubungkan…</span>
@@ -524,7 +762,8 @@ input::placeholder { color:var(--text4); }
   </nav>
   <div class="sidebar-footer">
     <div class="s-live"></div>
-    One Hidroponik · Ntf
+    <span style="flex:1">One Hidroponik · Ntf</span>
+    <button onclick="doLogout()" title="Keluar" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:7px;color:rgba(255,255,255,.4);padding:4px 9px;cursor:pointer;font-size:11px;transition:all .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'">↩ Keluar</button>
   </div>
 </aside>
 
@@ -549,7 +788,18 @@ input::placeholder { color:var(--text4); }
         🔔
         <div class="notif-dot" id="notifDot" style="display:none"></div>
       </button>
-      <div class="avatar">ONE</div>
+      <div class="avatar" id="userAvatar" title="Akun saya" style="cursor:pointer" onclick="toggleUserMenu()">ONE</div>
+      <!-- User dropdown -->
+      <div id="userMenu" style="display:none;position:absolute;top:54px;right:20px;background:#fff;border:1px solid var(--bdr2);border-radius:12px;box-shadow:var(--shadow-lg);min-width:200px;z-index:200;overflow:hidden;animation:fadeUp .15s ease">
+        <div style="padding:14px 16px;border-bottom:1px solid var(--bdr2)">
+          <div style="font-size:13px;font-weight:700;color:var(--text)" id="menuUserName">—</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px" id="menuUserEmail">—</div>
+        </div>
+        <div style="padding:8px">
+          <div onclick="nav('laporan',null);toggleUserMenu()" style="padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px;transition:background .15s" onmouseover="this.style.background='var(--g-pale)'" onmouseout="this.style.background=''">📄 Laporan & Export</div>
+          <div onclick="doLogout()" style="padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--red);display:flex;align-items:center;gap:8px;transition:background .15s" onmouseover="this.style.background='var(--red-bg)'" onmouseout="this.style.background=''">↩ Keluar</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="content">
@@ -808,6 +1058,19 @@ input::placeholder { color:var(--text4); }
         <div class="stat-card warn"><div class="stat-label">Bulan Ini</div><div class="stat-val" id="e-thismonth">—</div></div>
         <div class="stat-card"><div class="stat-label">Jumlah Transaksi</div><div class="stat-val" id="e-count">—</div></div>
       </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+        <div style="position:relative;flex:1;min-width:200px">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text4);font-size:14px">🔍</span>
+          <input type="text" id="expense-search" placeholder="Cari keterangan, kategori…" oninput="renderPengeluaran()" style="width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--bdr);border-radius:var(--radius-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:all .15s" onfocus="this.style.borderColor='var(--g2)'" onblur="this.style.borderColor='var(--bdr)'">
+        </div>
+        <select id="expense-filter" onchange="renderPengeluaran()" style="padding:9px 14px;border:1.5px solid var(--bdr);border-radius:var(--radius-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;background:var(--white);color:var(--text)">
+          <option value="">Semua Kategori</option>
+          <option>Nutrisi AB Mix</option><option>Benih / Bibit</option><option>Listrik</option>
+          <option>Air</option><option>Busa / Media Tanam</option><option>Tenaga Kerja</option>
+          <option>Packaging / Plastik</option><option>Perawatan Alat</option>
+          <option>Obat-Obatan</option><option>Lain-lain</option>
+        </select>
+      </div>
       <div class="card">
         <div class="card-header"><div class="card-title">🧾 Riwayat Pengeluaran</div><button class="btn btn-outline btn-sm" onclick="openModal('modal-expense')">+ Tambah</button></div>
         <div class="card-body" style="padding:0">
@@ -824,6 +1087,20 @@ input::placeholder { color:var(--text4); }
         <button class="btn btn-primary" onclick="openModal('modal-sale')">+ Tambah Penjualan</button>
       </div>
       <div class="info-box info">💡 Penjualan <strong>Tempo</strong> memerlukan approval sebelum aktif, dan tercatat sebagai piutang hingga dilunasi.</div>
+      <!-- Search & Filter bar -->
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+        <div style="position:relative;flex:1;min-width:200px">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text4);font-size:14px">🔍</span>
+          <input type="text" id="sale-search" placeholder="Cari pembeli, invoice…" oninput="renderSales()" style="width:100%;padding:9px 12px 9px 36px;border:1.5px solid var(--bdr);border-radius:var(--radius-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:all .15s" onfocus="this.style.borderColor='var(--g2)'" onblur="this.style.borderColor='var(--bdr)'">
+        </div>
+        <select id="sale-filter" onchange="renderSales()" style="padding:9px 14px;border:1.5px solid var(--bdr);border-radius:var(--radius-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;background:var(--white);color:var(--text)">
+          <option value="">Semua Status</option>
+          <option value="lunas">✅ Lunas</option>
+          <option value="tempo-aktif">🕐 Tempo Aktif</option>
+          <option value="pending-approval">⏳ Pending</option>
+          <option value="ditolak">❌ Ditolak</option>
+        </select>
+      </div>
       <div class="card">
         <div class="card-header"><div class="card-title">📋 Semua Transaksi Penjualan</div></div>
         <div class="card-body" style="padding:0">
@@ -1226,23 +1503,36 @@ input::placeholder { color:var(--text4); }
 
 <script>
 // ================================================================
-// SUPABASE CONFIG (Isi dengan credentials Anda atau pakai mode offline)
+// 🔧 SUPABASE CONFIG — Isi dengan credentials project Anda
+// Dapatkan dari: Supabase Dashboard → Settings → API
 // ================================================================
-const SUPABASE_URL = localStorage.getItem('sb_url') || '';
-const SUPABASE_KEY = localStorage.getItem('sb_key') || '';
+const SUPABASE_URL = 'GANTI_DENGAN_URL_SUPABASE_ANDA';
+const SUPABASE_KEY = 'GANTI_DENGAN_ANON_KEY_SUPABASE_ANDA';
 // ================================================================
 
-// SQL untuk membuat tabel di Supabase (jalankan di SQL Editor):
+// SQL Setup — jalankan SEKALI di Supabase SQL Editor:
 /*
-CREATE TABLE IF NOT EXISTS batches (id bigint generated by default as identity primary key, data jsonb, created_at timestamptz default now());
-CREATE TABLE IF NOT EXISTS expenses (id bigint generated by default as identity primary key, data jsonb, created_at timestamptz default now());
-CREATE TABLE IF NOT EXISTS sales (id bigint generated by default as identity primary key, data jsonb, created_at timestamptz default now());
-CREATE TABLE IF NOT EXISTS rencana (id bigint generated by default as identity primary key, data jsonb, created_at timestamptz default now());
-CREATE TABLE IF NOT EXISTS settings (id text primary key, data jsonb, updated_at timestamptz default now());
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE TABLE IF NOT EXISTS batches (id bigint generated by default as identity primary key, user_id uuid references auth.users(id) on delete cascade, data jsonb, created_at timestamptz default now());
+CREATE TABLE IF NOT EXISTS expenses (id bigint generated by default as identity primary key, user_id uuid references auth.users(id) on delete cascade, data jsonb, created_at timestamptz default now());
+CREATE TABLE IF NOT EXISTS sales (id bigint generated by default as identity primary key, user_id uuid references auth.users(id) on delete cascade, data jsonb, created_at timestamptz default now());
+CREATE TABLE IF NOT EXISTS rencana (id bigint generated by default as identity primary key, user_id uuid references auth.users(id) on delete cascade, data jsonb, created_at timestamptz default now());
+CREATE TABLE IF NOT EXISTS settings (id text, user_id uuid references auth.users(id) on delete cascade, data jsonb, updated_at timestamptz default now(), primary key (id, user_id));
+ALTER TABLE batches ENABLE ROW LEVEL SECURITY;
+ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sales ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rencana ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "own" ON batches FOR ALL USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
+CREATE POLICY "own" ON expenses FOR ALL USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
+CREATE POLICY "own" ON sales FOR ALL USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
+CREATE POLICY "own" ON rencana FOR ALL USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
+CREATE POLICY "own" ON settings FOR ALL USING (auth.uid()=user_id) WITH CHECK (auth.uid()=user_id);
 */
 
 let sbClient = null;
 let isOffline = true;
+let currentUser = null;
 
 window.state = {
   batches:[], expenses:[], sales:[], rencana:[],
@@ -1250,71 +1540,165 @@ window.state = {
   batchCounter:0, pindahTarget:null, harvestTarget:null, keuTab:'general'
 };
 
-// ── Init ──
-function init() {
-  // Clock
-  setInterval(()=>{
-    const n=new Date();
-    document.getElementById('clock').textContent=n.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-  },1000);
-  document.getElementById('clock').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-
-  if(!SUPABASE_URL || !SUPABASE_KEY) {
-    document.getElementById('loadingScreen').classList.add('hidden');
-    document.getElementById('configPanel').style.display='flex';
-    return;
+// ── Leaf canvas animation ──
+function initLeafCanvas() {
+  // Update login clock
+  function updateLoginClock() {
+    const el = document.getElementById('loginClock');
+    if(!el) return;
+    const now = new Date();
+    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][now.getDay()];
+    const tgl = now.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+    const jam = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+    el.textContent = `🕐 ${jam}  ·  ${hari}, ${tgl}`;
   }
-  connectSupabase();
+  updateLoginClock();
+  setInterval(updateLoginClock, 1000);
+  const canvas = document.getElementById('leafCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = canvas.offsetWidth;
+  let H = canvas.height = canvas.offsetHeight;
+  window.addEventListener('resize', () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; });
+  const particles = Array.from({length:70}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*2+0.5,
+    dx: (Math.random()-.5)*.3, dy: -(Math.random()*.5+.1),
+    alpha: Math.random()*.35+.05,
+    color: ['#4edba3','#16c47a','#a8f0d4','#b8f0d6','rgba(255,255,255,.6)'][Math.floor(Math.random()*5)]
+  }));
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha; ctx.fill();
+      p.x += p.dx; p.y += p.dy;
+      if(p.y < -5) { p.y=H+5; p.x=Math.random()*W; }
+      if(p.x < -5 || p.x > W+5) p.dx *= -1;
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+  draw();
 }
 
-window.saveConfig = function() {
-  const url = document.getElementById('cfg-url').value.trim();
-  const key = document.getElementById('cfg-key').value.trim();
-  if(!url || !key) { alert('Isi URL dan Key terlebih dahulu!'); return; }
-  localStorage.setItem('sb_url', url);
-  localStorage.setItem('sb_key', key);
-  location.reload();
+// ── Login / Register UI ──
+window.showRegister = function() {
+  document.getElementById('form-login').style.display='none';
+  document.getElementById('form-register').style.display='block';
+};
+window.showLogin = function() {
+  document.getElementById('form-register').style.display='none';
+  document.getElementById('form-login').style.display='block';
+};
+window.togglePwd = function(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if(inp.type==='password') { inp.type='text'; btn.style.opacity='1'; btn.title='Sembunyikan'; }
+  else { inp.type='password'; btn.style.opacity='.6'; btn.title='Tampilkan password'; }
 };
 
+window.doLogin = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if(!email||!pass) { showLoginError('Isi email dan password!'); return; }
+  const btn = document.getElementById('loginBtn');
+  document.getElementById('loginBtnText').textContent = '⏳ Masuk…';
+  btn.classList.add('loading');
+  try {
+    const {data, error} = await sbClient.auth.signInWithPassword({email, password:pass});
+    if(error) throw error;
+    currentUser = data.user;
+    showApp();
+  } catch(e) {
+    document.getElementById('loginBtnText').textContent = 'Masuk Sekarang';
+    btn.classList.remove('loading');
+    showLoginError(e.message.includes('Invalid')||e.message.includes('credentials')?'Email atau password salah.':e.message);
+  }
+};
+
+window.doRegister = async function() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if(!email||!pass){ showRegisterError('Isi email dan password!'); return; }
+  if(pass.length<6){ showRegisterError('Password minimal 6 karakter.'); return; }
+  const btn = document.getElementById('registerBtn');
+  document.getElementById('registerBtnText').textContent = '⏳ Mendaftar…';
+  btn.classList.add('loading');
+  try {
+    const {data,error} = await sbClient.auth.signUp({email, password:pass, options:{data:{display_name:name||'One Hidroponik'}}});
+    if(error) throw error;
+    document.getElementById('registerBtnText').textContent = 'Buat Akun →';
+    btn.classList.remove('loading');
+    document.getElementById('register-error').style.display='none';
+    document.getElementById('register-success').style.display='block';
+  } catch(e) {
+    document.getElementById('registerBtnText').textContent = 'Buat Akun →';
+    btn.classList.remove('loading');
+    showRegisterError(e.message);
+  }
+};
+
+function showLoginError(msg) {
+  const el=document.getElementById('login-error'); el.textContent='⚠️ '+msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none', 4000);
+}
+function showRegisterError(msg) {
+  const el=document.getElementById('register-error'); el.textContent='⚠️ '+msg; el.style.display='block';
+}
 window.useOfflineMode = function() {
-  document.getElementById('configPanel').style.display='none';
-  isOffline = true;
-  setSyncStatus('offline','Mode Offline (Demo)');
+  document.getElementById('loginScreen').style.display='none';
+  isOffline=true; currentUser=null;
+  setSyncStatus('offline','Mode Demo');
   document.getElementById('loadingScreen').classList.add('hidden');
   renderAll();
 };
+function showApp() {
+  document.getElementById('loginScreen').style.display='none';
+  updateUserUI();
+  loadAllData();
+}
 
-function connectSupabase() {
-  try {
-    sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    setSyncStatus('loading','Menghubungkan…');
-    loadAllData();
-    // Setup realtime
-    setupRealtime();
-    setTimeout(()=>{
-      if(document.getElementById('loadingScreen')&&!document.getElementById('loadingScreen').classList.contains('hidden')) {
-        document.getElementById('loadingScreen').classList.add('hidden');
-        setSyncStatus('error','Koneksi lambat');
-        renderAll();
-      }
-    }, 8000);
-  } catch(e) {
-    console.error(e);
-    isOffline=true;
-    setSyncStatus('offline','Mode Offline');
-    document.getElementById('loadingScreen').classList.add('hidden');
-    renderAll();
+// ── Init ──
+function init() {
+  const isConfigured = SUPABASE_URL && !SUPABASE_URL.includes('GANTI');
+  if(isConfigured) {
+    try { sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e) { console.error(e); }
   }
+  setInterval(()=>{
+    document.getElementById('clock').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  },1000);
+  document.getElementById('clock').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  if(!sbClient) {
+    document.getElementById('loadingScreen').classList.add('hidden');
+    isOffline=true; setSyncStatus('offline','Mode Demo'); renderAll(); return;
+  }
+  sbClient.auth.getSession().then(({data:{session}})=>{
+    if(session) { currentUser=session.user; updateUserUI(); showApp(); }
+    else {
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('loginScreen').style.display='flex';
+      setTimeout(initLeafCanvas,50);
+    }
+  }).catch(()=>{
+    document.getElementById('loadingScreen').classList.add('hidden');
+    document.getElementById('loginScreen').style.display='flex';
+    setTimeout(initLeafCanvas,50);
+  });
+  sbClient.auth.onAuthStateChange((event,session)=>{
+    if(event==='SIGNED_OUT') { currentUser=null; location.reload(); }
+  });
 }
 
 async function loadAllData() {
+  setSyncStatus('loading','Memuat data…');
   try {
     const [b,e,s,r,st] = await Promise.all([
       sbClient.from('batches').select('*').order('created_at'),
       sbClient.from('expenses').select('*').order('created_at',{ascending:false}),
       sbClient.from('sales').select('*').order('created_at',{ascending:false}),
       sbClient.from('rencana').select('*').order('created_at',{ascending:false}),
-      sbClient.from('settings').select('*').eq('id','saldo').single()
+      sbClient.from('settings').select('*').eq('id','saldo').maybeSingle()
     ]);
     if(b.data) window.state.batches = b.data.map(x=>({...x.data,_id:String(x.id)}));
     if(e.data) window.state.expenses = e.data.map(x=>({...x.data,_id:String(x.id)}));
@@ -1351,7 +1735,9 @@ async function dbAdd(table, data) {
     return loc;
   }
   try {
-    const {data:res,error} = await sbClient.from(table).insert({data}).select().single();
+    const row = {data};
+    if(currentUser) row.user_id = currentUser.id;
+    const {data:res,error} = await sbClient.from(table).insert(row).select().single();
     if(error) throw error;
     const item = {...data, _id:String(res.id)};
     window.state[table].unshift(item);
@@ -1380,8 +1766,11 @@ async function dbDelete(table, _id) {
 
 async function dbUpsertSettings(id, data) {
   if(!sbClient || isOffline) return;
-  try { await sbClient.from('settings').upsert({id, data, updated_at:new Date().toISOString()}); }
-  catch(e) { console.error(e); }
+  try {
+    const row = {id, data, updated_at:new Date().toISOString()};
+    if(currentUser) row.user_id = currentUser.id;
+    await sbClient.from('settings').upsert(row);
+  } catch(e) { console.error(e); }
 }
 
 // ── Sync status ──
@@ -1853,6 +2242,7 @@ function renderAll() {
   try{populateRencanaSelect();renderRencana();}catch(e){}
   try{updateTempoCount();}catch(e){}
   try{buildNotifications();}catch(e){}
+  try{updateUserUI();}catch(e){}
 }
 
 // ── CHART ──
@@ -1981,12 +2371,12 @@ function renderBatch() {
       <td>${batchBadge(b)}</td>
       <td><div style="display:flex;gap:4px;flex-wrap:wrap">${aksiUtama}<button class="btn btn-sm btn-ghost" onclick="openEditBatch('${b._id}')">✏️</button></div></td>
     </tr>`;
-  }).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:32px">Belum ada batch aktif.</td></tr>';
+  }).join(''):`<tr><td colspan="10"><div style="padding:28px;text-align:center"><div style="font-size:40px;margin-bottom:8px">🌱</div><div style="font-weight:700;font-size:14px;color:var(--text)">Belum ada batch aktif</div><div style="font-size:12px;color:var(--text4);margin-top:4px">Klik "+ Tambah Batch" untuk memulai tanam pertama</div></div></td></tr>`;
   const harvested=window.state.batches.filter(b=>b.status==='panen');
   document.getElementById('batchHarvestTable').innerHTML=harvested.length?[...harvested].reverse().map(b=>{
     const qR=b.qtyRakit!=null?b.qtyRakit:b.qty,sel=(b.actualKg-parseFloat(b.estKg)).toFixed(1);
     return`<tr><td><strong>#${b.id}</strong></td><td class="mono">${fmt(b.dateSemai)}</td><td>${b.qty.toLocaleString('id-ID')}</td><td>${qR.toLocaleString('id-ID')}</td><td class="mono">${fmt(b.actualHarvestDate||b.datePanen)}</td><td>${b.estKg} kg</td><td style="color:var(--g1);font-weight:700">${b.actualKg} kg</td><td style="color:${sel>=0?'var(--g1)':'var(--red)'};font-weight:700">${sel>=0?'+':''}${sel} kg</td><td style="font-size:12px;color:var(--text3)">${b.harvestNote||'—'}</td></tr>`;
-  }).join(''):'<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:32px">Belum ada riwayat panen.</td></tr>';
+  }).join(''):`<tr><td colspan="9"><div style="padding:28px;text-align:center"><div style="font-size:40px;margin-bottom:8px">🌾</div><div style="font-weight:700;font-size:14px;color:var(--text)">Belum ada riwayat panen</div><div style="font-size:12px;color:var(--text4);margin-top:4px">Riwayat panen akan muncul setelah batch pertama dipanen</div></div></td></tr>`;
 }
 
 // ── RENDER KEUANGAN ──
@@ -2021,7 +2411,14 @@ function renderPengeluaran() {
   document.getElementById('e-total').textContent=fmtRp(total);
   document.getElementById('e-thismonth').textContent=fmtRp(thisMonth);
   document.getElementById('e-count').textContent=window.state.expenses.length;
-  document.getElementById('expenseTable').innerHTML=window.state.expenses.length?window.state.expenses.map(e=>`
+  const qe=(document.getElementById('expense-search')?.value||'').toLowerCase();
+  const fe=(document.getElementById('expense-filter')?.value||'');
+  const expList=window.state.expenses.filter(e=>{
+    if(fe&&e.cat!==fe) return false;
+    if(qe&&!e.desc?.toLowerCase().includes(qe)&&!e.cat?.toLowerCase().includes(qe)) return false;
+    return true;
+  });
+  document.getElementById('expenseTable').innerHTML=expList.length?expList.map(e=>`
     <tr><td class="mono">${fmt(e.date)}</td><td><span class="badge b-gray">${e.cat}</span></td><td style="color:var(--text2)">${e.desc||'—'}</td><td style="color:var(--red);font-weight:700;font-family:'JetBrains Mono',monospace">${fmtRp(e.amount)}</td>
     <td><button class="btn btn-sm btn-danger" onclick="deleteExpense('${e._id}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:28px">Belum ada pengeluaran.</td></tr>';
 }
@@ -2058,12 +2455,20 @@ function renderRencana() {
 // ── RENDER SALES ──
 function renderSales() {
   const t=document.getElementById('saleTable'); if(!t) return;
-  t.innerHTML=window.state.sales.length?window.state.sales.map(s=>{
+  const q=(document.getElementById('sale-search')?.value||'').toLowerCase();
+  const f=(document.getElementById('sale-filter')?.value||'');
+  const list=window.state.sales.filter(s=>{
+    if(f&&s.status!==f) return false;
+    if(q&&!s.buyer?.toLowerCase().includes(q)&&!s.invoice?.toLowerCase().includes(q)&&!s.note?.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  t.innerHTML=list.length?list.map(s=>{
     let aksi='—';
     if(s.status==='pending-approval')aksi=`<div style="display:flex;gap:4px"><button class="btn btn-sm btn-primary" onclick="approveSale('${s._id}')">Approve</button><button class="btn btn-sm btn-danger" onclick="rejectSale('${s._id}')">Tolak</button></div>`;
-    else if(s.status==='tempo-aktif')aksi=`<button class="btn btn-sm btn-outline" onclick="markPaid('${s._id}')">Lunas</button>`;
+    else if(s.status==='tempo-aktif')aksi=`<div style="display:flex;gap:4px"><button class="btn btn-sm btn-outline" onclick="markPaid('${s._id}')">Lunas</button><button class="btn btn-sm btn-danger" onclick="deleteSale('${s._id}')">🗑️</button></div>`;
+    else if(s.status==='lunas'||s.status==='ditolak')aksi=`<button class="btn btn-sm btn-danger" onclick="deleteSale('${s._id}')">🗑️</button>`;
     return`<tr><td class="mono" style="color:var(--g1);font-weight:700;font-size:11px">${s.invoice||'—'}</td><td class="mono">${fmt(s.date)}</td><td><strong>${s.buyer}</strong></td><td class="mono">${s.qty} kg</td><td class="mono">${fmtRp(s.price)}</td><td style="font-weight:700;color:var(--g1);font-family:'JetBrains Mono',monospace">${fmtRp(s.total)}</td><td>${{tunai:'💵 Tunai',transfer:'🏦 Transfer',tempo:'🕐 Tempo'}[s.pay]||s.pay}</td><td class="mono">${s.due?fmt(s.due):'—'}</td><td>${saleBadge(s)}</td><td>${aksi}</td></tr>`;
-  }).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:32px">Belum ada penjualan.</td></tr>';
+  }).join(''):'<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:32px"><div style='padding:20px 0'><div style='font-size:36px;margin-bottom:8px'>🛒</div><div style='font-weight:700;color:var(--text)'>'+(q||f?'Tidak ada hasil yang cocok':'Belum ada penjualan')+'</div><div style='font-size:12px;color:var(--text4);margin-top:4px'>'+(q||f?'Coba ubah kata kunci atau filter':'Klik "+ Tambah Penjualan" untuk mencatat penjualan pertama')+'</div></div></td></tr>';
 }
 
 // ── RENDER TEMPO ──
@@ -2078,7 +2483,7 @@ function renderTempo() {
     if(s.status==='pending-approval')aksi=`<div style="display:flex;gap:4px"><button class="btn btn-sm btn-primary" onclick="approveSale('${s._id}')">Approve</button><button class="btn btn-sm btn-danger" onclick="rejectSale('${s._id}')">Tolak</button></div>`;
     else if(s.status==='tempo-aktif')aksi=`<button class="btn btn-sm btn-outline" onclick="markPaid('${s._id}')">Lunas</button>`;
     return`<tr><td class="mono" style="color:var(--g1);font-weight:700;font-size:11px">${s.invoice||'—'}</td><td><strong>${s.buyer}</strong></td><td class="mono">${fmt(s.date)}</td><td class="mono">${s.qty} kg</td><td style="font-weight:700;color:var(--g1);font-family:'JetBrains Mono',monospace">${fmtRp(s.total)}</td><td class="mono">${s.due?fmt(s.due):'—'}</td><td>${sisaTxt}</td><td>${s.status==='pending-approval'?'<span class="badge b-warn">⏳ Menunggu</span>':'<span class="badge b-tempo">🕐 Aktif</span>'}</td><td>${aksi}</td></tr>`;
-  }).join(''):'<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:32px">Tidak ada piutang tempo.</td></tr>';
+  }).join(''):`<tr><td colspan="9"><div style="padding:28px;text-align:center"><div style="font-size:40px;margin-bottom:8px">✅</div><div style="font-weight:700;font-size:14px;color:var(--text)">Semua piutang sudah lunas</div><div style="font-size:12px;color:var(--text4);margin-top:4px">Tidak ada tagihan tempo yang perlu ditagih</div></div></td></tr>`;
   const active=window.state.sales.filter(s=>s.status==='tempo-aktif');
   document.getElementById('tempoTotal').textContent=fmtRp(active.reduce((a,s)=>a+s.total,0));
   document.getElementById('tempoNear').textContent=active.filter(s=>s.due&&daysDiff(s.due)>=0&&daysDiff(s.due)<=7).length;
@@ -2090,8 +2495,195 @@ function updateTempoCount() {
   const el=document.getElementById('tempoCount');if(el){el.textContent=n;el.style.display=n?'':'none';}
 }
 
+// ── LOGOUT ──
+window.doLogout = async function() {
+  if(!sbClient) { location.reload(); return; }
+  await sbClient.auth.signOut();
+  location.reload();
+};
+
 // ── START ──
 document.addEventListener('DOMContentLoaded', init);
+
+// ── USER MENU ──
+window.toggleUserMenu = function() {
+  const m = document.getElementById('userMenu');
+  if(!m) return;
+  m.style.display = m.style.display==='none' ? 'block' : 'none';
+};
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('userMenu');
+  const avatar = document.getElementById('userAvatar');
+  if(menu && avatar && !avatar.contains(e.target) && !menu.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
+// Update avatar + user info from currentUser
+function updateUserUI() {
+  if(!currentUser) return;
+  const name = currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || 'User';
+  const email = currentUser.email || '';
+  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,3);
+  const av = document.getElementById('userAvatar');
+  const mn = document.getElementById('menuUserName');
+  const me = document.getElementById('menuUserEmail');
+  const su = document.getElementById('sidebarUser');
+  const sun = document.getElementById('sidebarUserName');
+  if(av) av.textContent = initials;
+  if(mn) mn.textContent = name;
+  if(me) me.textContent = email;
+  if(su && sun) { su.style.display='block'; sun.textContent = '👤 '+name; }
+}
+
+// ── FORGOT PASSWORD ──
+window.showForgot = function() {
+  document.getElementById('form-login').style.display='none';
+  document.getElementById('form-register').style.display='none';
+  document.getElementById('form-forgot').style.display='block';
+};
+
+window.doForgot = async function() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if(!email) { showForgotError('Masukkan email Anda!'); return; }
+  if(!sbClient) { showForgotError('Tidak terhubung ke Supabase.'); return; }
+  const btn = document.getElementById('forgotBtn');
+  document.getElementById('forgotBtnText').textContent = '⏳ Mengirim…';
+  btn.classList.add('loading');
+  try {
+    const {error} = await sbClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.href
+    });
+    if(error) throw error;
+    btn.classList.remove('loading');
+    document.getElementById('forgotBtnText').textContent = 'Kirim Link Reset →';
+    document.getElementById('forgot-error').style.display='none';
+    document.getElementById('forgot-success').style.display='block';
+  } catch(e) {
+    btn.classList.remove('loading');
+    document.getElementById('forgotBtnText').textContent = 'Kirim Link Reset →';
+    showForgotError(e.message);
+  }
+};
+function showForgotError(msg) {
+  const el=document.getElementById('forgot-error');
+  el.textContent='⚠️ '+msg; el.style.display='block';
+}
+
+// ── DELETE SALE ──
+window.deleteSale = async function(id) {
+  if(!confirm('Hapus data penjualan ini? Tindakan tidak bisa dibatalkan.')) return;
+  await dbDelete('sales', id);
+  toast('🗑️ Penjualan dihapus');
+};
+
+// ── IMPROVED printLaporan with period filter ──
+window.printLaporan = function(type) {
+  const nama = document.getElementById('rpt-nama')?.value||'One Hidroponik';
+  const footer = document.getElementById('rpt-note')?.value||'One Hidroponik — Sistem Manajemen Selada Keriting';
+  const period = document.getElementById('rpt-period')?.value||'all';
+  const now = new Date();
+  const thisM = now.toISOString().slice(0,7);
+  const lastM = new Date(now.getFullYear(), now.getMonth()-1, 1).toISOString().slice(0,7);
+  const thisY = now.getFullYear().toString();
+
+  function filterByPeriod(arr, dateKey) {
+    if(period==='all') return arr;
+    if(period==='thismonth') return arr.filter(x=>x[dateKey]?.startsWith(thisM));
+    if(period==='lastmonth') return arr.filter(x=>x[dateKey]?.startsWith(lastM));
+    if(period==='thisyear') return arr.filter(x=>x[dateKey]?.startsWith(thisY));
+    return arr;
+  }
+
+  const periodLabel = {all:'Semua Data',thismonth:'Bulan Ini ('+thisM+')',lastmonth:'Bulan Lalu ('+lastM+')',thisyear:'Tahun '+thisY}[period];
+
+  const css = `<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Plus Jakarta Sans',sans-serif;padding:32px;color:#111;font-size:13px;background:#fff}
+    .header{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:3px solid #0d7a4e;padding-bottom:16px;margin-bottom:24px}
+    .brand{font-size:22px;font-weight:800;color:#0d7a4e}
+    .meta{font-size:11px;color:#666;text-align:right;line-height:1.7}
+    h2{font-size:15px;font-weight:700;color:#0a1e14;margin-bottom:12px;padding:8px 0;border-bottom:1px solid #e0e0e0}
+    .summary{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+    .sum-box{background:#f0fdf8;border:1px solid #b8f0d6;border-radius:8px;padding:12px 18px;flex:1;min-width:120px}
+    .sum-val{font-size:20px;font-weight:800;color:#0d7a4e}
+    .sum-label{font-size:10px;color:#5a8a6e;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+    table{width:100%;border-collapse:collapse;margin-bottom:24px}
+    th{background:#0d7a4e;color:#fff;padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.5px}
+    td{padding:9px 12px;border-bottom:1px solid #f0f0f0;font-size:12px}
+    tr:nth-child(even) td{background:#fafafa}
+    .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+    .b-green{background:#dcfaee;color:#0d7a4e}.b-warn{background:#fff8f0;color:#f57c00}
+    .b-red{background:#fff0ef;color:#e53935}.b-gray{background:#f5f5f5;color:#616161}
+    .footer{margin-top:24px;padding-top:12px;border-top:1px solid #e0e0e0;font-size:10px;color:#999;display:flex;justify-content:space-between}
+    @media print{body{padding:16px}}
+  </style>`;
+
+  let body = `<div class="header">
+    <div><div class="brand">🌿 ${nama}</div><div style="font-size:12px;color:#666;margin-top:2px">Sistem Manajemen Selada Keriting Hidroponik</div></div>
+    <div class="meta">
+      Dicetak: ${now.toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}<br>
+      Periode: <strong>${periodLabel}</strong>
+    </div>
+  </div>`;
+
+  if(type==='keuangan') {
+    const sales = filterByPeriod(window.state.sales.filter(s=>s.status==='lunas'), 'date');
+    const expenses = filterByPeriod(window.state.expenses, 'date');
+    const income = sales.reduce((a,s)=>a+s.total,0);
+    const expense = expenses.reduce((a,e)=>a+e.amount,0);
+    const profit = income-expense;
+    const fmtR = n=>'Rp '+Math.round(n||0).toLocaleString('id-ID');
+    body += `<h2>📊 Laporan Keuangan — ${periodLabel}</h2>
+    <div class="summary">
+      <div class="sum-box"><div class="sum-val">${fmtR(income)}</div><div class="sum-label">Pemasukan</div></div>
+      <div class="sum-box" style="background:#fff0ef;border-color:#ffcdd2"><div class="sum-val" style="color:#e53935">${fmtR(expense)}</div><div class="sum-label" style="color:#c62828">Pengeluaran</div></div>
+      <div class="sum-box" style="background:${profit>=0?'#f0fdf8':'#fff0ef'};border-color:${profit>=0?'#b8f0d6':'#ffcdd2'}"><div class="sum-val" style="color:${profit>=0?'#0d7a4e':'#e53935'}">${fmtR(profit)}</div><div class="sum-label">Laba Bersih</div></div>
+    </div>
+    <table><thead><tr><th>Tanggal</th><th>Invoice</th><th>Pembeli</th><th>Qty</th><th>Harga/kg</th><th>Total</th></tr></thead><tbody>
+    ${sales.map(s=>`<tr><td>${new Date(s.date+'T00:00:00').toLocaleDateString('id-ID')}</td><td><strong>${s.invoice||'—'}</strong></td><td>${s.buyer}</td><td>${s.qty} kg</td><td>${fmtR(s.price)}</td><td><strong>${fmtR(s.total)}</strong></td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:#999;padding:16px">Tidak ada data</td></tr>'}
+    </tbody></table>
+    <h2>💸 Detail Pengeluaran</h2>
+    <table><thead><tr><th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th></tr></thead><tbody>
+    ${expenses.map(e=>`<tr><td>${new Date(e.date+'T00:00:00').toLocaleDateString('id-ID')}</td><td><span class="badge b-gray">${e.cat}</span></td><td>${e.desc||'—'}</td><td style="color:#e53935;font-weight:700">${fmtR(e.amount)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#999;padding:16px">Tidak ada data</td></tr>'}
+    </tbody></table>`;
+  } else if(type==='batch') {
+    const batches = window.state.batches;
+    const panen = batches.filter(b=>b.status==='panen');
+    const totalKg = panen.reduce((a,b)=>a+(b.actualKg||0),0);
+    body += `<h2>🌱 Laporan Batch & Panen</h2>
+    <div class="summary">
+      <div class="sum-box"><div class="sum-val">${batches.length}</div><div class="sum-label">Total Batch</div></div>
+      <div class="sum-box"><div class="sum-val">${panen.length}</div><div class="sum-label">Sudah Panen</div></div>
+      <div class="sum-box"><div class="sum-val">${totalKg.toFixed(1)} kg</div><div class="sum-label">Total Panen</div></div>
+    </div>
+    <table><thead><tr><th>#</th><th>Tgl Semai</th><th>Bibit Semai</th><th>Di Instalasi</th><th>Tgl Panen</th><th>Est. Hasil</th><th>Aktual</th><th>Status</th></tr></thead><tbody>
+    ${batches.map(b=>{const st=b.status==='panen'?'Panen':b.status==='rakit'?'Di Instalasi':'Semai';const sc=b.status==='panen'?'b-gray':b.status==='rakit'?'b-green':'b-warn';return`<tr><td><strong>#${b.id}</strong>${b.note?`<div style="font-size:10px;color:#999">${b.note}</div>`:''}</td><td>${b.dateSemai?new Date(b.dateSemai+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td>${b.qty?.toLocaleString('id-ID')||'—'}</td><td>${b.qtyRakit?.toLocaleString('id-ID')||'—'}</td><td>${(b.actualHarvestDate||b.datePanen)?new Date((b.actualHarvestDate||b.datePanen)+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td>${b.estKg||'—'} kg</td><td style="font-weight:700;color:${b.actualKg?'#0d7a4e':'#999'}">${b.actualKg?b.actualKg+' kg':'—'}</td><td><span class="badge ${sc}">${st}</span></td></tr>`;}).join('')||'<tr><td colspan="8" style="text-align:center;color:#999;padding:16px">Tidak ada data</td></tr>'}
+    </tbody></table>`;
+  } else if(type==='tempo') {
+    const fmtR = n=>'Rp '+Math.round(n||0).toLocaleString('id-ID');
+    const active = window.state.sales.filter(s=>s.status==='tempo-aktif');
+    const total = active.reduce((a,s)=>a+s.total,0);
+    const now2 = new Date();
+    body += `<h2>🕐 Laporan Piutang Tempo Aktif</h2>
+    <div class="summary">
+      <div class="sum-box"><div class="sum-val">${active.length}</div><div class="sum-label">Total Piutang</div></div>
+      <div class="sum-box"><div class="sum-val">${fmtR(total)}</div><div class="sum-label">Total Nilai</div></div>
+    </div>
+    <table><thead><tr><th>Invoice</th><th>Pembeli</th><th>Tgl Jual</th><th>Total</th><th>Jatuh Tempo</th><th>Sisa Hari</th></tr></thead><tbody>
+    ${active.map(s=>{const sisa=s.due?Math.floor((new Date(s.due+'T00:00:00')-now2)/86400000):null;const sc=sisa===null?'b-gray':sisa<0?'b-red':sisa<=7?'b-warn':'b-green';return`<tr><td><strong>${s.invoice||'—'}</strong></td><td>${s.buyer}</td><td>${s.date?new Date(s.date+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td style="font-weight:700;color:#0d7a4e">${fmtR(s.total)}</td><td>${s.due?new Date(s.due+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td><span class="badge ${sc}">${sisa===null?'—':sisa<0?'Lewat '+Math.abs(sisa)+'hr':sisa+' hari'}</span></td></tr>`;}).join('')||'<tr><td colspan="6" style="text-align:center;color:#999;padding:16px">Tidak ada piutang aktif</td></tr>'}
+    </tbody></table>`;
+  }
+
+  body += `<div class="footer"><span>${footer}</span><span>One Hidroponik &copy; ${now.getFullYear()}</span></div>`;
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan ${nama}</title>${css}</head><body>${body}</body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(), 600);
+};
+
 </script>
 </body>
 </html>

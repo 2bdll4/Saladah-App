@@ -904,10 +904,15 @@ input::placeholder { color:var(--text4); }
       <div class="card" style="margin-bottom:18px">
         <div class="card-body" style="padding:14px 20px">
           <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Siklus Tanam Selada Keriting</div>
+          <!-- Ganti tl-bar di sec-batch: -->
           <div class="tl-bar">
-            <div class="tl-seg tl-seed">🌱 Semai (14 hr)</div>
-            <div class="tl-seg tl-grow">🪴 Instalasi Hidroponik (35 hr)</div>
-            <div class="tl-seg tl-harvest">🌾</div>
+            <div class="tl-seg tl-seed" style="flex:14">🌱 Semaian (14 hr)</div>
+            <div class="tl-seg" style="flex:14;background:#d1fae5;color:#065f46">🌿 Peremajaan (14 hr)</div>
+            <div class="tl-seg tl-grow" style="flex:21">🌾 Pendewasaan (21 hr)</div>
+            <div class="tl-seg tl-harvest" style="flex:3">✅</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text4);margin-top:4px;font-family:'JetBrains Mono',monospace">
+            <span>Hari 0</span><span>Hari 14</span><span>Hari 28</span><span>Hari 49 (Panen)</span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text4);margin-top:4px;font-family:'JetBrains Mono',monospace">
             <span>Hari 0</span><span>Hari 14 (Pindah)</span><span>Hari 49 (Panen)</span>
@@ -1099,7 +1104,10 @@ input::placeholder { color:var(--text4); }
         </select>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-title">📋 Semua Transaksi Penjualan</div></div>
+        <div class="card-header">
+          <div class="card-title">📋 Semua Transaksi Penjualan</div>
+          <button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 Export CSV</button>
+        </div>
         <div class="card-body" style="padding:0">
           <table><thead><tr><th>Invoice</th><th>Tanggal</th><th>Pembeli</th><th>Qty (kg)</th><th>Harga/kg</th><th>Total</th><th>Bayar</th><th>Jatuh Tempo</th><th>Status</th><th>Aksi</th></tr></thead>
           <tbody id="saleTable"><tr><td colspan="10" style="text-align:center;color:var(--text3);padding:28px">Memuat…</td></tr></tbody></table>
@@ -1222,7 +1230,7 @@ input::placeholder { color:var(--text4); }
   <div class="modal">
     <div class="modal-header"><div class="modal-title">🌱 Tambah Batch Tanam Baru</div><button class="modal-close" onclick="closeModal('modal-batch')">✕</button></div>
     <div class="modal-body">
-      <div class="info-box green">Sistem Instalasi · Semai 14 hari → Pindah ke NFT/DFT → Panen hari ke-49 · ≈ 150 gr/tanaman</div>
+      <div class="info-box green">Sistem Instalasi · Semai 14 hari → Peremajaan 14 hari → Pendewasaan 21 → Panen hari ke-49 · ≈ 150 gr/tanaman</div>
       <div class="form-row fc2">
         <div class="form-group"><label>Tanggal Semai</label><input type="date" id="b-date" oninput="previewBatch()"></div>
         <div class="form-group"><label>Jumlah Bibit Semai</label>
@@ -1586,6 +1594,7 @@ window.showRegister = function() {
 };
 window.showLogin = function() {
   document.getElementById('form-register').style.display='none';
+  document.getElementById('form-forgot').style.display='none';
   document.getElementById('form-login').style.display='block';
 };
 window.togglePwd = function(inputId, btn) {
@@ -1788,7 +1797,7 @@ const daysDiff = d => { const t=new Date(today()+'T00:00:00'),td=new Date(d+'T00
 
 window.adjustCounter = function(id,n) {
   const el=document.getElementById(id); if(!el) return;
-  el.value=Math.max(parseFloat(el.min||0),Math.round((parseFloat(el.value)||0)+n)*10)/10;
+  el.value=Math.max(parseFloat(el.min||0),(parseFloat(el.value)||0)+n);
 };
 
 // ── Nav ──
@@ -1836,11 +1845,13 @@ window.openModal = function(id) {
     document.getElementById('saldo-note').value=window.state.saldo.note||'';
   }
   if(id==='modal-rencana') {
-    if(!document.getElementById('r-id').value) {
-      document.getElementById('r-month').value=today().slice(0,7);
-      document.getElementById('r-amount').value=''; document.getElementById('r-desc').value='';
-    }
+  if(!document.getElementById('r-id').value) {
+    document.getElementById('r-month').value=today().slice(0,7);
+    document.getElementById('r-amount').value='';
+    document.getElementById('r-desc').value='';
+    document.getElementById('r-cat').value='Nutrisi AB Mix'; // tambah ini
   }
+}
 };
 window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
@@ -1890,6 +1901,26 @@ function buildNotifications() {
 }
 
 // ── BATCH ──
+function getBatchStatus(b) {
+  if(b.status==='panen') return 'panen';
+  const hari = Math.floor((Date.now()-new Date(b.dateSemai+'T00:00:00'))/86400000);
+  if(hari < 14) return 'semaian';
+  if(hari < 28) return 'peremajaan';
+  if(hari < 49) return 'pendewasaan';
+  if(b.status==='rakit') return today()>=b.datePanen?'siap-panen':'pendewasaan';
+  return today()>=b.datePindah?'pindah-siap':'semaian';
+}
+function getStatusBadge(status){
+  switch(status){
+    case 'semaian': return '🌱 Semaian';
+    case 'peremajaan': return '🌿 Peremajaan';
+    case 'pendewasaan': return '🌾 Pendewasaan';
+    case 'siap-panen': return '🌾 Siap Panen!';
+    case 'pindah-siap': return '🔄 Siap Dipindah';
+    case 'panen': return '✅ Sudah Panen';
+    default: return status;
+  }
+}
 window.previewBatch = function() {
   const d=document.getElementById('b-date').value, q=parseInt(document.getElementById('b-qty').value)||0;
   if(!d||!q){document.getElementById('batchPreview').style.display='none';return;}
@@ -1955,26 +1986,30 @@ window.confirmHarvest = async function() {
   closeModal('modal-harvest');
   toast('🌾 Panen batch #'+b.id+' dicatat! '+actual+' kg');
 };
+  window.deleteBatch = async function(id) {
+  if(!confirm('Hapus batch ini? Data tidak bisa dikembalikan.')) return;
+  await dbDelete('batches', id);
+  toast('🗑️ Batch dihapus');
+};
 
-function getBatchStatus(b) {
-  if(b.status==='panen') return 'panen';
-  if(b.status==='rakit') return today()>=b.datePanen?'siap-panen':'rakit';
-  return today()>=b.datePindah?'pindah-siap':'semai';
-}
 function batchBadge(b) {
-  return {
-    'panen':'<span class="badge b-gray">✅ Sudah Panen</span>',
-    'siap-panen':'<span class="badge b-info">🌾 Siap Panen!</span>',
-    'rakit':'<span class="badge b-green">🪴 Di Instalasi</span>',
-    'pindah-siap':'<span class="badge b-warn">🔄 Siap Dipindah</span>',
-    'semai':'<span class="badge b-blue">🌱 Penyemaian</span>'
-  }[getBatchStatus(b)];
+  const s = getBatchStatus(b);
+  const map = {
+    'panen':       '<span class="badge b-gray">✅ Sudah Panen</span>',
+    'siap-panen':  '<span class="badge b-info">🌾 Siap Panen!</span>',
+    'pendewasaan': '<span class="badge b-green">🌾 Pendewasaan</span>',
+    'peremajaan':  '<span class="badge b-blue">🌿 Peremajaan</span>',
+    'pindah-siap': '<span class="badge b-warn">🔄 Siap Dipindah</span>',
+    'semaia':     '<span class="badge b-blue">🌱 Semaian</span>',
+    
+  };
+  return map[s] || `<span class="badge b-gray">${s}</span>`;
 }
 
 // ── EXPENSE ──
 window.saveExpense = async function() {
   const d=document.getElementById('e-date').value, a=parseFloat(document.getElementById('e-amount').value)||0;
-  if(!d||!a){toast('⚠️ Isi tanggal & jumlah!','error');return;}
+  if(!d||!a||a<=0){toast('⚠️ Isi tanggal & jumlah lebih dari 0!','error');return;}
   await dbAdd('expenses',{date:d,cat:document.getElementById('e-cat').value,desc:document.getElementById('e-desc').value,amount:a});
   closeModal('modal-expense');
   document.getElementById('e-amount').value=''; document.getElementById('e-desc').value='';
@@ -2008,6 +2043,7 @@ window.saveSale = async function() {
   const qty=parseFloat(document.getElementById('s-qty').value)||0, price=parseFloat(document.getElementById('s-price').value)||0;
   const pay=document.getElementById('s-pay').value;
   if(!d||!buyer||!qty||!price){toast('⚠️ Lengkapi data penjualan!','error');return;}
+  if(qty <= 0 || price <= 0){toast('⚠️ Qty dan harga harus lebih dari 0!','error');return;}
   let due='',status=pay==='tempo'?'pending-approval':'lunas';
   if(pay==='tempo'){due=document.getElementById('s-duedate').value;if(!due){toast('⚠️ Isi tanggal jatuh tempo!','error');return;}}
   const invoice=document.getElementById('s-invoice').value;
@@ -2182,7 +2218,7 @@ window.printLaporan = function(type) {
     html+=`</tbody></table>`;
   } else if(type==='batch') {
     html+=`<h2>Laporan Panen</h2><table><thead><tr><th>#</th><th>Semai</th><th>Bibit</th><th>Panen</th><th>Est.</th><th>Aktual</th><th>Status</th></tr></thead><tbody>`;
-    window.state.batches.forEach(b=>html+=`<tr><td>${b.id}</td><td>${fmt(b.dateSemai)}</td><td>${b.qty}</td><td>${fmt(b.actualHarvestDate||b.datePanen)}</td><td>${b.estKg} kg</td><td>${b.actualKg?b.actualKg+' kg':'—'}</td><td>${getBatchStatus(b)}</td></tr>`);
+    window.state.batches.forEach(b=>html+=`<tr><td>${b.id}</td><td>${fmt(b.dateSemai)}</td><td>${b.qty}</td><td>${fmt(b.actualHarvestDate||b.datePanen)}</td><td>${b.estKg} kg</td><td>${b.actualKg?b.actualKg+' kg':'—'}</td><td>${getBatchStatus(b.dataSemai)}</td></tr>`);
     html+=`</tbody></table>`;
   } else if(type==='tempo') {
     html+=`<h2>Laporan Piutang Tempo</h2><table><thead><tr><th>Invoice</th><th>Pembeli</th><th>Total</th><th>Jatuh Tempo</th><th>Sisa Hari</th></tr></thead><tbody>`;
@@ -2318,7 +2354,8 @@ function renderDashboard() {
   [...window.state.sales].slice(0,3).forEach(s=>acts.push({dot:'green',text:`Penjualan ${fmtRp(s.total)} kepada ${s.buyer}`,time:fmt(s.date)}));
   [...window.state.expenses].slice(0,2).forEach(e=>acts.push({dot:'warn',text:`Pengeluaran ${fmtRp(e.amount)} — ${e.cat}`,time:fmt(e.date)}));
   [...window.state.batches.filter(b=>b.status==='panen')].slice(0,2).forEach(b=>acts.push({dot:'green',text:`Panen Batch #${b.id}: ${b.actualKg} kg`,time:fmt(b.actualHarvestDate||b.datePanen)}));
-  acts.sort((a,b)=>0);
+  acts.sort((a,b) => new Date(b.rawDate||0) - new Date(a.rawDate||0));
+  acts.push({dot:'green', text:`...`, time:fmt(s.date), rawDate:s.date});
   const af=document.getElementById('activityFeed');
   af.innerHTML=acts.length?acts.map(a=>`<div class="activity-item"><div class="activity-dot ${a.dot}"></div><div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join(''):'<div style="text-align:center;color:var(--text4);padding:16px;font-size:13px">Belum ada aktivitas</div>';
 
@@ -2343,13 +2380,26 @@ function renderDashboard() {
       <td><div style="display:flex;align-items:center;gap:6px"><div class="prog-bar" style="width:60px"><div class="prog-fill" style="width:${Math.min(pct2,100)}%;background:${pct2>100?'var(--red)':pct2>80?'var(--orange)':'var(--g2)'}"></div></div><span style="font-size:11px;color:var(--text4)">${pct2}%</span></div></td>
     </tr>`;
   }).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px">Belum ada rencana pengeluaran bulan ini.</td></tr>';
+if(!window.state.batches.length && !window.state.sales.length) {
+  document.getElementById('activityFeed').innerHTML = `
+    <div style="text-align:center;padding:20px">
+      <div style="font-size:32px;margin-bottom:8px">👋</div>
+      <div style="font-weight:700;font-size:13px;color:var(--text)">Selamat datang!</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px">Mulai dengan menambah batch tanam pertama Anda</div>
+      <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="openModal('modal-batch')">🌱 Mulai Tanam</button>
+    </div>`;
+}
+
 }
 
 // ── RENDER BATCH ──
 function renderBatch() {
   const active=[...window.state.batches.filter(b=>b.status!=='panen')].sort((a,b)=>new Date(a.datePanen)-new Date(b.datePanen));
   document.getElementById('batchActiveTable').innerHTML=active.length?active.map(b=>{
-    const s=getBatchStatus(b),hari=Math.max(0,Math.floor((Date.now()-new Date(b.dateSemai+'T00:00:00'))/86400000)),prog=Math.min(hari/49*100,100);
+    const s=getBatchStatus(b);
+    const hari=Math.max(0,Math.floor((Date.now()-new Date(b.dateSemai+'T00:00:00'))/86400000));
+    const prog=Math.min(hari/49*100,100);
+    const faseLabel = hari<14?`Semaian (hr ${hari}/14)`:hari<28?`Peremajaan (hr ${hari}/28)`:hari<49?`Pendewasaan (hr ${hari}/49)`:`Siap Panen`;
     let aksiUtama='';
     if(s==='pindah-siap') aksiUtama=`<button class="btn btn-sm btn-warn" onclick="openPindahModal('${b._id}')">🪴 Pindah</button>`;
     else if(s==='siap-panen') aksiUtama=`<button class="btn btn-sm btn-primary" onclick="openHarvestModal('${b._id}')">🌾 Panen</button>`;
@@ -2362,17 +2412,18 @@ function renderBatch() {
       <td class="mono" style="color:var(--g1);font-weight:700">${fmt(b.datePanen)}</td>
       <td>${b.estKg} kg</td>
       <td>
-        <div style="font-size:10px;color:var(--text4);margin-bottom:3px;font-family:'JetBrains Mono',monospace">Hari ${hari}/49</div>
+        <div style="font-size:10px;color:var(--text4);margin-bottom:3px;font-family:'JetBrains Mono',monospace">${faseLabel}</div>
         <div class="prog-bar" style="width:80px"><div class="prog-fill" style="width:${prog}%"></div></div>
       </td>
       <td>${batchBadge(b)}</td>
-      <td><div style="display:flex;gap:4px;flex-wrap:wrap">${aksiUtama}<button class="btn btn-sm btn-ghost" onclick="openEditBatch('${b._id}')">✏️</button></div></td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">${aksiUtama}<button class="btn btn-sm btn-ghost" onclick="openEditBatch('${b._id}')">✏️</button><button class="btn btn-sm btn-danger" onclick="deleteBatch('${b._id}')">🗑️</button></div></td>
     </tr>`;
   }).join(''):`<tr><td colspan="10"><div style="padding:28px;text-align:center"><div style="font-size:40px;margin-bottom:8px">🌱</div><div style="font-weight:700;font-size:14px;color:var(--text)">Belum ada batch aktif</div><div style="font-size:12px;color:var(--text4);margin-top:4px">Klik "+ Tambah Batch" untuk memulai tanam pertama</div></div></td></tr>`;
   const harvested=window.state.batches.filter(b=>b.status==='panen');
   document.getElementById('batchHarvestTable').innerHTML=harvested.length?[...harvested].reverse().map(b=>{
     const qR=b.qtyRakit!=null?b.qtyRakit:b.qty,sel=(b.actualKg-parseFloat(b.estKg)).toFixed(1);
     return`<tr><td><strong>#${b.id}</strong></td><td class="mono">${fmt(b.dateSemai)}</td><td>${b.qty.toLocaleString('id-ID')}</td><td>${qR.toLocaleString('id-ID')}</td><td class="mono">${fmt(b.actualHarvestDate||b.datePanen)}</td><td>${b.estKg} kg</td><td style="color:var(--g1);font-weight:700">${b.actualKg} kg</td><td style="color:${sel>=0?'var(--g1)':'var(--red)'};font-weight:700">${sel>=0?'+':''}${sel} kg</td><td style="font-size:12px;color:var(--text3)">${b.harvestNote||'—'}</td></tr>`;
+  
   }).join(''):`<tr><td colspan="9"><div style="padding:28px;text-align:center"><div style="font-size:40px;margin-bottom:8px">🌾</div><div style="font-weight:700;font-size:14px;color:var(--text)">Belum ada riwayat panen</div><div style="font-size:12px;color:var(--text4);margin-top:4px">Riwayat panen akan muncul setelah batch pertama dipanen</div></div></td></tr>`;
 }
 
@@ -2415,9 +2466,19 @@ function renderPengeluaran() {
     if(qe&&!e.desc?.toLowerCase().includes(qe)&&!e.cat?.toLowerCase().includes(qe)) return false;
     return true;
   });
-  document.getElementById('expenseTable').innerHTML=expList.length?expList.map(e=>`
+  if(expList.length) {
+  const totalFiltered = expList.reduce((a,e)=>a+e.amount,0);
+  document.getElementById('expenseTable').innerHTML = expList.map(e=>`
     <tr><td class="mono">${fmt(e.date)}</td><td><span class="badge b-gray">${e.cat}</span></td><td style="color:var(--text2)">${e.desc||'—'}</td><td style="color:var(--red);font-weight:700;font-family:JetBrains Mono,monospace">${fmtRp(e.amount)}</td>
-    <td><button class="btn btn-sm btn-danger" onclick="deleteExpense('${e._id}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:28px">Belum ada pengeluaran.</td></tr>';
+    <td><button class="btn btn-sm btn-danger" onclick="deleteExpense('${e._id}')">Hapus</button></td></tr>`).join('') 
+    + `<tr style="background:var(--g-pale)">
+      <td colspan="3" style="font-weight:700;font-size:12px;color:var(--text2)">TOTAL (${expList.length} item)</td>
+      <td style="font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">${fmtRp(totalFiltered)}</td>
+      <td></td>
+    </tr>`;
+} else {
+  document.getElementById('expenseTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:28px">Belum ada pengeluaran.</td></tr>';
+}
 }
 
 // ── RENDER RENCANA ──
@@ -2609,7 +2670,17 @@ window.deleteSale = async function(id) {
   await dbDelete('sales', id);
   toast('🗑️ Penjualan dihapus');
 };
-
+// Taruh setelah window.deleteSale
+window.exportCSV = function() {
+  const rows = [['Invoice','Tanggal','Pembeli','Qty(kg)','Harga/kg','Total','Bayar','Status']];
+  window.state.sales.forEach(s => rows.push([s.invoice,s.date,s.buyer,s.qty,s.price,s.total,s.pay,s.status]));
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download = 'penjualan-'+today()+'.csv';
+  a.click();
+  toast('✅ CSV berhasil diexport!');
+};
 // ── IMPROVED printLaporan with period filter ──
 window.printLaporan = function(type) {
   const nama = document.getElementById('rpt-nama')?.value||'One Hidroponik';
@@ -2692,7 +2763,7 @@ window.printLaporan = function(type) {
       <div class="sum-box"><div class="sum-val">${totalKg.toFixed(1)} kg</div><div class="sum-label">Total Panen</div></div>
     </div>
     <table><thead><tr><th>#</th><th>Tgl Semai</th><th>Bibit Semai</th><th>Di Instalasi</th><th>Tgl Panen</th><th>Est. Hasil</th><th>Aktual</th><th>Status</th></tr></thead><tbody>
-    ${batches.map(b=>{const st=b.status==='panen'?'Panen':b.status==='rakit'?'Di Instalasi':'Semai';const sc=b.status==='panen'?'b-gray':b.status==='rakit'?'b-green':'b-warn';return`<tr><td><strong>#${b.id}</strong>${b.note?`<div style="font-size:10px;color:#999">${b.note}</div>`:''}</td><td>${b.dateSemai?new Date(b.dateSemai+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td>${b.qty?.toLocaleString('id-ID')||'—'}</td><td>${b.qtyRakit?.toLocaleString('id-ID')||'—'}</td><td>${(b.actualHarvestDate||b.datePanen)?new Date((b.actualHarvestDate||b.datePanen)+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td>${b.estKg||'—'} kg</td><td style="font-weight:700;color:${b.actualKg?'#0d7a4e':'#999'}">${b.actualKg?b.actualKg+' kg':'—'}</td><td><span class="badge ${sc}">${st}</span></td></tr>`;}).join('')||'<tr><td colspan="8" style="text-align:center;color:#999;padding:16px">Tidak ada data</td></tr>'}
+    ${batches.map(b=>{const st = getStatusBadge(getBatchStatus(b));const sc=b.status==='panen'?'b-gray':b.status==='rakit'?'b-green':'b-warn';return`<tr><td><strong>#${b.id}</strong>${b.note?`<div style="font-size:10px;color:#999">${b.note}</div>`:''}</td><td>${b.dateSemai?new Date(b.dateSemai+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td>${b.qty?.toLocaleString('id-ID')||'—'}</td><td>${b.qtyRakit?.toLocaleString('id-ID')||'—'}</td><td>${(b.actualHarvestDate||b.datePanen)?new Date((b.actualHarvestDate||b.datePanen)+'T00:00:00').toLocaleDateString('id-ID'):'—'}</td><td>${b.estKg||'—'} kg</td><td style="font-weight:700;color:${b.actualKg?'#0d7a4e':'#999'}">${b.actualKg?b.actualKg+' kg':'—'}</td><td><span class="badge ${sc}">${st}</span></td></tr>`;}).join('')||'<tr><td colspan="8" style="text-align:center;color:#999;padding:16px">Tidak ada data</td></tr>'}
     </tbody></table>`;
   } else if(type==='tempo') {
     const fmtR = n=>'Rp '+Math.round(n||0).toLocaleString('id-ID');

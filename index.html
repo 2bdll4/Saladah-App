@@ -906,7 +906,7 @@ input::placeholder { color:var(--text4); }
           <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Siklus Tanam Selada Keriting</div>
           <!-- Ganti tl-bar di sec-batch: -->
           <div class="tl-bar">
-            <div class="tl-seg tl-seed" style="flex:14">🌱 Semaian (14 hr)</div>
+            <div class="tl-seg tl-seed" style="flex:14">🌱 Penyemaian  (14 hr)</div>
             <div class="tl-seg" style="flex:14;background:#d1fae5;color:#065f46">🌿 Peremajaan (14 hr)</div>
             <div class="tl-seg tl-grow" style="flex:21">🌾 Pendewasaan (21 hr)</div>
             <div class="tl-seg tl-harvest" style="flex:3">✅</div>
@@ -1904,15 +1904,15 @@ function buildNotifications() {
 function getBatchStatus(b) {
   if(b.status==='panen') return 'panen';
   const hari = Math.floor((Date.now()-new Date(b.dateSemai+'T00:00:00'))/86400000);
-  if(hari < 14) return 'semaian';
+  if(hari < 14) return 'Penyemaian ';
   if(hari < 28) return 'peremajaan';
   if(hari < 49) return 'pendewasaan';
   if(b.status==='rakit') return today()>=b.datePanen?'siap-panen':'pendewasaan';
-  return today()>=b.datePindah?'pindah-siap':'semaian';
+  return today()>=b.datePindah?'pindah-siap':'Penyemaian ';
 }
 function getStatusBadge(status){
   switch(status){
-    case 'semaian': return '🌱 Semaian';
+    case 'Penyemaian ': return '🌱 Penyemaian ';
     case 'peremajaan': return '🌿 Peremajaan';
     case 'pendewasaan': return '🌾 Pendewasaan';
     case 'siap-panen': return '🌾 Siap Panen!';
@@ -2000,7 +2000,7 @@ function batchBadge(b) {
     'pendewasaan': '<span class="badge b-green">🌾 Pendewasaan</span>',
     'peremajaan':  '<span class="badge b-blue">🌿 Peremajaan</span>',
     'pindah-siap': '<span class="badge b-warn">🔄 Siap Dipindah</span>',
-    'semaia':     '<span class="badge b-blue">🌱 Semaian</span>',
+    'semaia':     '<span class="badge b-blue">🌱 Penyemaian </span>',
     
   };
   return map[s] || `<span class="badge b-gray">${s}</span>`;
@@ -2399,7 +2399,7 @@ function renderBatch() {
     const s=getBatchStatus(b);
     const hari=Math.max(0,Math.floor((Date.now()-new Date(b.dateSemai+'T00:00:00'))/86400000));
     const prog=Math.min(hari/49*100,100);
-    const faseLabel = hari<14?`Semaian (hr ${hari}/14)`:hari<28?`Peremajaan (hr ${hari}/28)`:hari<49?`Pendewasaan (hr ${hari}/49)`:`Siap Panen`;
+    const faseLabel = hari<14?`Penyemaian  (hr ${hari}/14)`:hari<28?`Peremajaan (hr ${hari}/28)`:hari<49?`Pendewasaan (hr ${hari}/49)`:`Siap Panen`;
     let aksiUtama='';
     if(s==='pindah-siap') aksiUtama=`<button class="btn btn-sm btn-warn" onclick="openPindahModal('${b._id}')">🪴 Pindah</button>`;
     else if(s==='siap-panen') aksiUtama=`<button class="btn btn-sm btn-primary" onclick="openHarvestModal('${b._id}')">🌾 Panen</button>`;
